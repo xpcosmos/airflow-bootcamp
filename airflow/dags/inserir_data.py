@@ -1,6 +1,6 @@
 import os
-from airflow import DAG
 from datetime import datetime
+from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 
@@ -22,6 +22,8 @@ echoo = BashOperator(
         dag=dag
     )
 
+# TODO: Adicionar informação de sucesso utilizando-se do XCom em vez de ls_active
+# TODO:
 download_yellow_tip = BashOperator(
         task_id='download_yellow_tip',
         bash_command=f'curl --location --output {AIRFLOW_HOME}/yellow_tip.parquet {YELLOW_TIP_URL}',
