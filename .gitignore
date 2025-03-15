@@ -10,3 +10,9 @@ __pycache__
 *config*
 *.terraform*
 *tfstate*
+*__pycache__*
+*.pid
+*.csv
+*.parquet
+*config*
+*.cfg
