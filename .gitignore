@@ -1,5 +1,6 @@
 airflow/logs/*
 .env
+.venv
 *.terraform*
 *tfstate*
 *__pycache__*
@@ -7,4 +8,6 @@ airflow/logs/*
 *.csv
 *.parquet
 *config*
+secrets/*
 *.cfg
+.env*
