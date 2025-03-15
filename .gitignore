@@ -1,4 +1,12 @@
 airflow/logs/*
+airflow/plugins/*
+*.parquet
+*.cfg
+*.csv
+*.pid
+__pycache__
+*.pyc
 .env
+*config*
 *.terraform*
 *tfstate*
