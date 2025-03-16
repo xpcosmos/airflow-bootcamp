@@ -8,6 +8,8 @@ __pycache__
 *.pyc
 .env
 *config*
+.venv
+.venv
 *.terraform*
 *tfstate*
 *__pycache__*
@@ -15,4 +17,6 @@ __pycache__
 *.csv
 *.parquet
 *config*
+secrets/*
 *.cfg
+.env*

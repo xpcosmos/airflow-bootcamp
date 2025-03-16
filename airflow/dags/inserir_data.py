@@ -1,10 +1,11 @@
-# import os
+import os
 from datetime import datetime
 from airflow import DAG
-# from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
+from airflow.providers.google.cloud.transfers.local_to_gcs import LocalFilesystemToGCSOperator
 
 AIRFLOW_HOME = "/opt/airflow"
+GCP_BUCKET_NAME = os.environ.get('GCP_BUCKET_NAME')
 
 YELLOW_TIP_URL = 'https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-01.parquet'
 LOOKUP_TABLE = 'https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv'
@@ -14,8 +15,6 @@ dag =  DAG(dag_id="inserir_data_gcp",
         catchup=False,
         start_date=datetime(2024,10,26))
 
-# TODO: Adicionar informação de sucesso utilizando-se do XCom em vez de ls_active
-# TODO:
 download_yellow_tip = BashOperator(
         task_id='download_yellow_tip',
         bash_command=f'curl --location --output {AIRFLOW_HOME}/yellow_tip.parquet {YELLOW_TIP_URL}',
@@ -28,4 +27,11 @@ download_lookup_table = BashOperator(
         dag=dag
     )
 
-[download_lookup_table, download_yellow_tip]
+send_local_to_gcs = LocalFilesystemToGCSOperator(
+    task_id='send_local_to_gcs',
+    src=f'{AIRFLOW_HOME}/yellow_tip.parquet',
+    dst=f'landding/yellow_tip/{datetime.now()}.parquet',
+    bucket=GCP_BUCKET_NAME,
+    dag=dag
+)
+[download_lookup_table, download_yellow_tip] >> send_local_to_gcs
