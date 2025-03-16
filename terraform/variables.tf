@@ -43,7 +43,7 @@ variable "airflow_role" {
 # ----------------------------------------
 # Key
 # ----------------------------------------
-variable "public_key_type" {
+variable "private_key_type" {
   default =  "TYPE_GOOGLE_CREDENTIALS_FILE"
   description = "Tipo de retorno das credenciais"
   type = string

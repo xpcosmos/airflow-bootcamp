@@ -27,3 +27,24 @@ resource "google_storage_bucket" "airflow_bucket" {
     }
   }
 }
+
+resource "google_service_account" "airflow" {
+  account_id = "airflow-test-user"
+  display_name = "airflow_test_user"
+}
+
+resource "google_project_iam_member" "airflow" {
+  project =  var.project_id
+  role    = "roles/${var.airflow_role}"
+  member  = "serviceAccount:${google_service_account.airflow.email}"
+}
+
+resource "google_service_account_key" "airflow" {
+  service_account_id = google_service_account.airflow.name
+  private_key_type    = var.private_key_type
+}
+
+resource "local_file" "private_key_file" {
+  content  = google_service_account_key.airflow.private_key
+  filename = var.private_key_path
+}
